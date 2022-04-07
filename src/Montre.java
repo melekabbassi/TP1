@@ -16,12 +16,56 @@ d'une chaine de caractères, en consultant sa montre si elle en a une (sinon ell
 retourner une chaine vide).
 a. On veut faire en sorte que chaque montre ne soit portée que par une seule personne.
 Proposer des ajouts/modifications des deux classes précédentes pour garantir cela.*/
-import java.util.Scanner;
 
 public class Montre {
-    private int heure;
-    private int minute;
+    private Integer hour;
+    private Integer minute;
 
-    
-    
+    public Montre(Integer hour, Integer minute) {
+        this.hour = hour;
+        this.minute = minute;
+    }
+
+    public Montre(Montre montre) {
+        this.hour = montre.hour;
+        this.minute = montre.minute;
+    }
+
+    public Integer getHour() {
+        return hour;
+    }
+
+    public void setHour(Integer hour) {
+        this.hour = hour;
+    }
+
+    public Integer getMinute() {
+        return minute;
+    }
+
+    public void setMinute(Integer minute) {
+        this.minute = minute;
+    }
+
+    public void addMinute(Integer minute) {
+        this.minute += minute;
+        if (this.minute > 59) {
+            this.minute -= 60;
+            this.hour++;
+        }
+        if (this.hour > 23) {
+            this.hour -= 24;
+        }
+    }
+
+    public void print() {
+        System.out.println(this.hour + "h" + this.minute);
+    }
+    public static void main(String[] args) {
+        
+        Montre montre = new Montre(13, 45);
+        montre.print();
+        Montre montre2 = montre;
+        montre2.print();
+    }
 }
