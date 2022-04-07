@@ -18,49 +18,76 @@ import java.util.Scanner;
 
 public class PoupeeRusse {
     private Integer size;
+    private Boolean isOpen;
+    private Boolean isIn;
 
+    //Constructor
     public PoupeeRusse(Integer size) {
+        this.size = size;
+        this.isOpen = false;
+    }
+    //getters and setters
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
         this.size = size;
     }
 
+    public Boolean getIsOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(Boolean isOpen) {
+        this.isOpen = isOpen;
+    }
+
+    public Boolean getIsIn() {
+        return isIn;
+    }
+
+    public void setIsIn(Boolean isIn) {
+        this.isIn = isIn;
+    }
+
+    //methods
+
+    public Boolean isInPoupee() {
+        return false;
+    }
+
+    // function ouvrir if not open and not in another poupee
     public void ouvrir() {
-        if (this.size == 0) {
-            System.out.println("La poupée est déjà ouverte");
-        } else {
-            this.size = 0;
-            System.out.println("La poupée est ouverte");
+        if (!isOpen && !isInPoupee()) {
+            isOpen = true;
         }
     }
 
-    public void fermer(){
-        if (this.size == 1) {
-            System.out.println("La poupée est déjà fermée");
-        } else {
-            this.size = 1;
-            System.out.println("La poupée est fermée");
+    // function fermer if open and not in another poupee
+    public void fermer() {
+        if (isOpen && !isInPoupee()) {
+            isOpen = false;
         }
     }
 
-    public void placerDans(PoupeeRusse p){
-        if (this.size == 0 && p.size == 1 && p.size > this.size) {
-            p.size = 0;
-            this.size = p.size;
-            System.out.println("La poupée est dans la poupée");
-        } else {
-            System.out.println("La poupée ne peut pas être placée dans la poupée");
+    // function placerDans if size > p.size and p is open and not in another poupee
+    public void placerDans(PoupeeRusse p) {
+        if (size > p.size && p.isOpen && !p.isInPoupee()) {
+            p.isOpen = false;
+            isOpen = true;
+            isIn = true;
         }
     }
 
-    public void SortirDe(PoupeeRusse p){
-        if (this.size == 0 && p.size == 0) {
-            p.size = 1;
-            this.size = p.size;
-            System.out.println("La poupée est sortie de la poupée");
-        } else {
-            System.out.println("La poupée ne peut pas être sortie de la poupée");
+    //function sortirDe if p is open and p is in another poupee
+    public void sortirDe(PoupeeRusse p) {
+        if (p.isOpen && p.isInPoupee()) {
+            p.isOpen = false;
+            isOpen = true;
+            isIn = false;
         }
     }
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Entrez la taille de la poupée");
@@ -72,9 +99,36 @@ public class PoupeeRusse {
         System.out.println("Entrez la taille de la poupée à sortir de la poupée");
         Integer size3 = sc.nextInt();
         PoupeeRusse p3 = new PoupeeRusse(size3);
+
+        System.out.println("La poupée est fermée : " + p.isOpen);
         p.ouvrir();
-        p.placerDans(p2);
-        p.SortirDe(p3);
+        System.out.println("La poupée est ouverte : " + p.isOpen);
+        
+        p2.sortirDe(p);
+        System.out.println("La poupée est sortie de la poupée : " + p2.isInPoupee());
+        
+        p2.ouvrir();
+        System.out.println("La poupée est ouverte : " + p2.isOpen);
+        
+        p3.sortirDe(p2);
+        System.out.println("La poupée est sortie de la poupée : " + p3.isInPoupee());
+        
+        p3.ouvrir();
+        System.out.println("La poupée est ouverte : " + p3.isOpen);
+        
+        p3.fermer();
+        System.out.println("La poupée est fermée : " + p3.isOpen);
+        
+        p3.placerDans(p2);
+        System.out.println("La poupée est dans la poupée : " + p3.isInPoupee());
+        
+        p2.fermer();
+        System.out.println("La poupée est fermée : " + p2.isOpen);
+        
+        p2.placerDans(p);
+        System.out.println("La poupée est dans la poupée : " + p2.isInPoupee());
+        
         p.fermer();
+        System.out.println("La poupée est fermée : " + p.isOpen);
     }
 }
